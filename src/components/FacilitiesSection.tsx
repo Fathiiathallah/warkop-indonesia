@@ -1,73 +1,36 @@
 import { Wifi, Zap, Flame, Compass, Car, Users } from "lucide-react";
 
 const facilities = [
-  {
-    icon: Wifi,
-    title: "Free Wi-Fi Kencang",
-    description: "Koneksi stabil dan ngebut untuk nugas kuliah, kerja remote (WFW), atau sekadar scrolling santai.",
-  },
-  {
-    icon: Zap,
-    title: "Banyak Stopkontak",
-    description: "Colokan listrik tersedia di hampir setiap meja, tak perlu khawatir baterai laptop & gadget habis.",
-  },
-  {
-    icon: Flame,
-    title: "Area Smoking & Nyaman",
-    description: "Sirkulasi udara terbuka yang leluasa khas warung kopi Makassar yang hidup dan akrab.",
-  },
-  {
-    icon: Compass,
-    title: "Buka Tiap Hari Sampai 24.00",
-    description: "Dari jam 08.00 pagi buat kopi pembuka hari, hingga tengah malam untuk nobar atau cerita santai.",
-  },
-  {
-    icon: Car,
-    title: "Parkir Nyaman",
-    description: "Area parkir motor dan mobil yang mudah dijangkau tepat di Jl. Anggrek Raya Panakkukang.",
-  },
-  {
-    icon: Users,
-    title: "Titik Temu Komunitas",
-    description: "Tempat berkumpulnya pegiat UMKM, mahasiswa, komunitas kreatif, hingga obrolan warga lokal.",
-  },
+  { icon: Wifi, title: "Wi-Fi kencang", desc: "Stabil untuk nugas, kerja remote, atau sekadar scrolling." },
+  { icon: Zap, title: "Stopkontak di meja", desc: "Hampir setiap meja punya colokan. Baterai aman." },
+  { icon: Flame, title: "Area smoking", desc: "Sirkulasi terbuka khas warkop Makassar." },
+  { icon: Compass, title: "Buka sampai 24.00", desc: "Dari kopi pembuka pagi sampai obrolan tengah malam." },
+  { icon: Car, title: "Parkir luas", desc: "Motor dan mobil, langsung di Jl. Anggrek Raya." },
+  { icon: Users, title: "Titik temu komunitas", desc: "Mahasiswa, pekerja kreatif, dan warga lokal." },
 ];
 
 export default function FacilitiesSection() {
   return (
-    <section id="fasilitas" className="py-16 md:py-24 bg-white text-stone-900 border-t border-stone-200/60">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        <div className="text-center max-w-xl mx-auto mb-12 space-y-2">
-          <span className="text-xs font-bold uppercase tracking-wider text-[#8C5D39] bg-[#F4EFEA] px-3.5 py-1.5 rounded-full inline-block">
-            Kenyamanan Pengunjung
-          </span>
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-[#1B382B]">
-            Fasilitas Tempat Nongkrong
+    <section id="fasilitas" className="py-16 sm:py-24 bg-white">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6">
+        <div className="max-w-xl">
+          <span className="eyebrow text-[var(--green)]">Fasilitas</span>
+          <h2 className="mt-3 text-[1.9rem] sm:text-[2.6rem] leading-[1.1] font-extrabold text-[var(--ink)]">
+            Yang bikin betah lama.
           </h2>
-          <p className="text-xs sm:text-sm text-stone-500">
-            Didesain untuk kenyamanan nongkrong, nugas, dan kumpul santai bersama teman-teman
-          </p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {facilities.map((fac, idx) => {
-            const Icon = fac.icon;
+        <div className="mt-10 grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {facilities.map((f) => {
+            const Icon = f.icon;
             return (
               <div
-                key={idx}
-                className="p-6 rounded-2xl bg-[#FAF7F2] border border-stone-200/70 hover:border-emerald-600/40 transition-all hover:shadow-md flex flex-col justify-between"
+                key={f.title}
+                className="rounded-xl border border-[var(--line)] p-5 hover:border-[var(--green)]/40 hover:bg-[var(--surface)] transition-colors"
               >
-                <div className="space-y-3">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-stone-200 flex items-center justify-center text-[#1B382B] shadow-xs">
-                    <Icon className="w-6 h-6" />
-                  </div>
-                  <h3 className="font-bold text-base text-stone-900">
-                    {fac.title}
-                  </h3>
-                  <p className="text-xs sm:text-sm text-stone-600 leading-relaxed">
-                    {fac.description}
-                  </p>
-                </div>
+                <Icon className="w-5 h-5 text-[var(--green)]" strokeWidth={1.9} />
+                <h3 className="mt-3 text-[0.92rem] font-bold text-[var(--ink)]">{f.title}</h3>
+                <p className="mt-1.5 text-[0.82rem] leading-relaxed text-[var(--muted)]">{f.desc}</p>
               </div>
             );
           })}

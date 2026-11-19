@@ -6,10 +6,10 @@ import {
   Plus,
   Minus,
   Trash2,
-  Send,
   ShoppingBag,
   Store,
   AlertCircle,
+  Send,
 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
 import {
@@ -39,17 +39,16 @@ export default function CartDrawer() {
 
   if (!isOpen) return null;
 
-  const handleCheckout = (e: React.FormEvent) => {
+  const submit = (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg("");
 
     if (!customerName.trim()) {
-      setErrorMsg("Harap masukkan nama pemesan.");
+      setErrorMsg("Nama pemesan wajib diisi.");
       return;
     }
-
     if (orderType === "dine-in" && !tableNumber.trim()) {
-      setErrorMsg("Harap masukkan nomor meja kamu.");
+      setErrorMsg("Nomor meja wajib diisi.");
       return;
     }
 
@@ -63,262 +62,203 @@ export default function CartDrawer() {
       totalPrice,
     };
 
-    const url = generateWhatsAppOrderUrl(payload);
-    window.open(url, "_blank");
+    window.open(generateWhatsAppOrderUrl(payload), "_blank");
   };
 
+  const inputCls =
+    "w-full rounded-lg border border-[var(--line)] px-3 py-2.5 text-[0.85rem] text-[var(--ink)] placeholder:text-[var(--muted)]/60 focus:outline-none focus:border-[var(--green)] focus:ring-2 focus:ring-[var(--green)]/10 transition-colors";
+
   return (
-    <div className="fixed inset-0 z-50 overflow-hidden">
-      {/* Backdrop */}
-      <div
-        onClick={() => setIsOpen(false)}
-        className="absolute inset-0 bg-stone-900/60 backdrop-blur-xs transition-opacity"
-      />
+    <div className="fixed inset-0 z-50">
+      <div onClick={() => setIsOpen(false)} className="absolute inset-0 bg-[var(--ink)]/40 backdrop-blur-sm" />
 
-      <div className="fixed inset-y-0 right-0 max-w-full flex pl-10">
-        <div className="w-screen max-w-md bg-white shadow-2xl flex flex-col">
-          {/* Header */}
-          <div className="p-4 sm:p-5 bg-[#1B382B] text-white flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div className="p-2 bg-emerald-900 rounded-xl text-amber-300">
-                <ShoppingBag className="w-5 h-5" />
-              </div>
-              <div>
-                <h2 className="font-bold text-base sm:text-lg">Pesanan Saya</h2>
-                <p className="text-xs text-emerald-200">
-                  {totalItems} item dipilih
-                </p>
-              </div>
-            </div>
-
-            <button
-              onClick={() => setIsOpen(false)}
-              className="p-2 text-emerald-200 hover:text-white rounded-lg hover:bg-emerald-900/50 transition-colors"
-              aria-label="Tutup Keranjang"
-            >
-              <X className="w-5 h-5" />
-            </button>
+      <aside className="absolute inset-y-0 right-0 w-full max-w-[430px] bg-white flex flex-col shadow-2xl">
+        <div className="px-5 py-4 border-b border-[var(--line)] flex items-center justify-between">
+          <div>
+            <h2 className="text-base font-extrabold text-[var(--ink)]">Pesanan saya</h2>
+            <p className="text-[0.78rem] text-[var(--muted)]">{totalItems} item dipilih</p>
           </div>
+          <button
+            onClick={() => setIsOpen(false)}
+            className="p-2 rounded-lg text-[var(--muted)] hover:bg-[var(--surface)] hover:text-[var(--ink)] transition-colors"
+            aria-label="Tutup"
+          >
+            <X className="w-5 h-5" />
+          </button>
+        </div>
 
-          {/* Body */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-5">
-            {items.length === 0 ? (
-              <div className="h-full flex flex-col items-center justify-center text-center p-6 space-y-3">
-                <div className="w-16 h-16 rounded-full bg-stone-100 flex items-center justify-center text-stone-400">
-                  <ShoppingBag className="w-8 h-8" />
-                </div>
-                <h3 className="font-bold text-stone-800 text-base">
-                  Keranjang masih kosong
-                </h3>
-                <p className="text-xs text-stone-500 max-w-xs">
-                  Yuk jelajahi daftar menu dan pilih kopi, mie, atau camilan favoritmu!
-                </p>
+        <div className="flex-1 overflow-y-auto px-5 py-5 space-y-5">
+          {items.length === 0 ? (
+            <div className="h-full flex flex-col items-center justify-center text-center gap-3 py-16">
+              <div className="w-14 h-14 rounded-full bg-[var(--surface)] grid place-items-center text-[var(--muted)]">
+                <ShoppingBag className="w-6 h-6" strokeWidth={1.6} />
+              </div>
+              <p className="text-sm font-bold text-[var(--ink)]">Keranjang masih kosong</p>
+              <p className="text-[0.8rem] text-[var(--muted)] max-w-[26ch]">
+                Pilih kopi, mie, atau camilan favoritmu dulu.
+              </p>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="mt-1 rounded-lg bg-[var(--green-tint)] text-[var(--green)] px-4 py-2 text-[0.78rem] font-bold hover:bg-[var(--green)] hover:text-white transition-colors"
+              >
+                Lihat menu
+              </button>
+            </div>
+          ) : (
+            <>
+              <div className="flex items-center justify-between pb-2 border-b border-[var(--line)]">
+                <span className="text-[0.72rem] font-bold uppercase tracking-wider text-[var(--muted)]">Rincian</span>
                 <button
-                  onClick={() => setIsOpen(false)}
-                  className="mt-2 text-xs font-bold text-[#1B382B] bg-emerald-100 hover:bg-emerald-200 px-4 py-2 rounded-full transition-colors"
+                  onClick={clearCart}
+                  className="inline-flex items-center gap-1 text-[0.72rem] font-bold text-red-600 hover:text-red-700"
                 >
-                  Lihat Menu Sekarang
+                  <Trash2 className="w-3 h-3" /> Kosongkan
                 </button>
               </div>
-            ) : (
-              <>
-                {/* Items List */}
-                <div className="space-y-3">
-                  <div className="flex items-center justify-between pb-2 border-b border-stone-200 text-xs font-semibold text-stone-500 uppercase tracking-wider">
-                    <span>Menu Terpilih</span>
-                    <button
-                      onClick={clearCart}
-                      className="text-red-600 hover:text-red-700 font-medium flex items-center gap-1 normal-case text-xs"
-                    >
-                      <Trash2 className="w-3.5 h-3.5" />
-                      Kosongkan
-                    </button>
-                  </div>
 
-                  {items.map((item) => (
-                    <div
-                      key={item.id}
-                      className="p-3.5 rounded-xl border border-stone-200 bg-[#FAF7F2] space-y-2"
-                    >
-                      <div className="flex items-start justify-between gap-2">
-                        <div>
-                          <h4 className="text-sm font-bold text-stone-900">
-                            {item.name}
-                          </h4>
-                          <p className="text-xs font-semibold text-[#1B382B]">
-                            {formatRupiah(item.price)}
-                          </p>
-                        </div>
+              <div className="space-y-3">
+                {items.map((item) => (
+                  <div key={item.id} className="rounded-xl border border-[var(--line)] p-3.5">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="min-w-0">
+                        <h4 className="text-[0.88rem] font-bold text-[var(--ink)] leading-snug">{item.name}</h4>
+                        <p className="text-[0.76rem] text-[var(--muted)] tabular-nums mt-0.5">{formatRupiah(item.price)}</p>
+                      </div>
+                      <button
+                        onClick={() => removeFromCart(item.id)}
+                        className="text-[var(--muted)] hover:text-red-600 p-1 transition-colors"
+                        aria-label="Hapus item"
+                      >
+                        <X className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+
+                    <div className="mt-3 flex items-center justify-between">
+                      <div className="flex items-center rounded-lg border border-[var(--line)]">
                         <button
-                          onClick={() => removeFromCart(item.id)}
-                          className="text-stone-400 hover:text-red-500 p-1"
-                          aria-label="Hapus Item"
+                          onClick={() => updateQuantity(item.id, -1)}
+                          className="w-7 h-7 grid place-items-center text-[var(--muted)] hover:text-[var(--green)] transition-colors"
                         >
-                          <Trash2 className="w-4 h-4" />
+                          <Minus className="w-3 h-3" />
+                        </button>
+                        <span className="w-7 text-center text-[0.78rem] font-bold tabular-nums text-[var(--ink)]">
+                          {item.quantity}
+                        </span>
+                        <button
+                          onClick={() => updateQuantity(item.id, 1)}
+                          className="w-7 h-7 grid place-items-center text-[var(--muted)] hover:text-[var(--green)] transition-colors"
+                        >
+                          <Plus className="w-3 h-3" />
                         </button>
                       </div>
-
-                      <div className="flex items-center justify-between pt-1">
-                        <div className="flex items-center gap-2 bg-white rounded-lg p-0.5 border border-stone-200">
-                          <button
-                            onClick={() => updateQuantity(item.id, -1)}
-                            className="w-6 h-6 flex items-center justify-center rounded text-stone-600 hover:bg-stone-100 text-xs font-bold"
-                          >
-                            <Minus className="w-3 h-3" />
-                          </button>
-                          <span className="w-5 text-center text-xs font-bold text-stone-900">
-                            {item.quantity}
-                          </span>
-                          <button
-                            onClick={() => updateQuantity(item.id, 1)}
-                            className="w-6 h-6 flex items-center justify-center rounded bg-[#8C5D39] text-white hover:bg-[#724a2c] text-xs font-bold"
-                          >
-                            <Plus className="w-3 h-3" />
-                          </button>
-                        </div>
-
-                        <span className="text-xs font-extrabold text-stone-800">
-                          {formatRupiah(item.price * item.quantity)}
-                        </span>
-                      </div>
+                      <span className="text-[0.85rem] font-extrabold tabular-nums text-[var(--ink)]">
+                        {formatRupiah(item.price * item.quantity)}
+                      </span>
                     </div>
+                  </div>
+                ))}
+              </div>
+
+              <form id="checkout" onSubmit={submit} className="space-y-3.5 pt-4 border-t border-[var(--line)]">
+                <p className="text-[0.72rem] font-bold uppercase tracking-wider text-[var(--muted)]">Opsi pemesanan</p>
+
+                <div className="grid grid-cols-2 gap-2">
+                  {([
+                    ["dine-in", "Makan di tempat", Store],
+                    ["takeaway", "Bungkus", ShoppingBag],
+                  ] as const).map(([val, txt, Icon]) => (
+                    <button
+                      key={val}
+                      type="button"
+                      onClick={() => setOrderType(val)}
+                      className={`rounded-lg border py-2.5 text-[0.75rem] font-bold flex items-center justify-center gap-1.5 transition-colors ${
+                        orderType === val
+                          ? "border-[var(--green)] bg-[var(--green)] text-white"
+                          : "border-[var(--line)] text-[var(--muted)] hover:border-[var(--green)]"
+                      }`}
+                    >
+                      <Icon className="w-3.5 h-3.5" /> {txt}
+                    </button>
                   ))}
                 </div>
 
-                {/* Form Pesanan */}
-                <form id="checkout-form" onSubmit={handleCheckout} className="space-y-4 pt-4 border-t border-stone-200">
-                  <h3 className="text-xs font-bold uppercase tracking-wider text-stone-500">
-                    Opsi Pemesanan
-                  </h3>
+                <div>
+                  <label className="block text-[0.74rem] font-bold text-[var(--ink)] mb-1">Nama pemesan *</label>
+                  <input
+                    type="text"
+                    required
+                    value={customerName}
+                    onChange={(e) => setCustomerName(e.target.value)}
+                    placeholder="Nama kamu"
+                    className={inputCls}
+                  />
+                </div>
 
-                  {/* Order Type Selector */}
-                  <div className="grid grid-cols-2 gap-2">
-                    <button
-                      type="button"
-                      onClick={() => setOrderType("dine-in")}
-                      className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all ${
-                        orderType === "dine-in"
-                          ? "border-[#1B382B] bg-[#1B382B] text-white shadow-sm"
-                          : "border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
-                      }`}
-                    >
-                      <Store className="w-4 h-4" />
-                      <span>Makan di Tempat</span>
-                    </button>
-
-                    <button
-                      type="button"
-                      onClick={() => setOrderType("takeaway")}
-                      className={`p-3 rounded-xl border text-xs font-bold flex flex-col items-center justify-center gap-1.5 transition-all ${
-                        orderType === "takeaway"
-                          ? "border-[#1B382B] bg-[#1B382B] text-white shadow-sm"
-                          : "border-stone-200 bg-white text-stone-700 hover:bg-stone-50"
-                      }`}
-                    >
-                      <ShoppingBag className="w-4 h-4" />
-                      <span>Bungkus / Take Away</span>
-                    </button>
-                  </div>
-
-                  {/* Customer Name */}
+                {orderType === "dine-in" ? (
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Nama Kamu / Pemesan *
-                    </label>
+                    <label className="block text-[0.74rem] font-bold text-[var(--ink)] mb-1">Nomor meja *</label>
                     <input
                       type="text"
                       required
-                      value={customerName}
-                      onChange={(e) => setCustomerName(e.target.value)}
-                      placeholder="Contoh: Rian / Fathi"
-                      className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#1B382B]"
+                      value={tableNumber}
+                      onChange={(e) => setTableNumber(e.target.value)}
+                      placeholder="04"
+                      className={inputCls}
                     />
                   </div>
-
-                  {/* Conditional inputs */}
-                  {orderType === "dine-in" ? (
-                    <div>
-                      <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Nomor Meja *
-                      </label>
-                      <input
-                        type="text"
-                        required
-                        value={tableNumber}
-                        onChange={(e) => setTableNumber(e.target.value)}
-                        placeholder="Contoh: 04 / Meja Depan"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#1B382B]"
-                      />
-                    </div>
-                  ) : (
-                    <div>
-                      <label className="block text-xs font-bold text-stone-700 mb-1">
-                        Perkiraan Jam Ambil (Opsional)
-                      </label>
-                      <input
-                        type="text"
-                        value={pickupTime}
-                        onChange={(e) => setPickupTime(e.target.value)}
-                        placeholder="Contoh: Sekitar 15 menit lagi / Jam 20.30"
-                        className="w-full px-3.5 py-2.5 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#1B382B]"
-                      />
-                    </div>
-                  )}
-
-                  {/* General Notes */}
+                ) : (
                   <div>
-                    <label className="block text-xs font-bold text-stone-700 mb-1">
-                      Catatan Tambahan (Opsional)
-                    </label>
-                    <textarea
-                      rows={2}
-                      value={generalNotes}
-                      onChange={(e) => setGeneralNotes(e.target.value)}
-                      placeholder="Contoh: Es kopi jangan terlalu manis, mie pedas"
-                      className="w-full px-3.5 py-2 rounded-xl border border-stone-200 text-xs text-stone-900 focus:outline-none focus:ring-2 focus:ring-[#1B382B]"
+                    <label className="block text-[0.74rem] font-bold text-[var(--ink)] mb-1">Jam ambil</label>
+                    <input
+                      type="text"
+                      value={pickupTime}
+                      onChange={(e) => setPickupTime(e.target.value)}
+                      placeholder="15 menit lagi"
+                      className={inputCls}
                     />
                   </div>
+                )}
 
-                  {errorMsg && (
-                    <div className="flex items-center gap-1.5 p-2.5 rounded-lg bg-red-50 text-red-700 text-xs font-semibold">
-                      <AlertCircle className="w-4 h-4 shrink-0" />
-                      <span>{errorMsg}</span>
-                    </div>
-                  )}
-                </form>
-              </>
-            )}
-          </div>
-
-          {/* Footer Checkout */}
-          {items.length > 0 && (
-            <div className="p-4 sm:p-5 bg-stone-50 border-t border-stone-200 space-y-3">
-              <div className="space-y-1 text-xs">
-                <div className="flex items-center justify-between text-stone-500">
-                  <span>Subtotal Pesanan</span>
-                  <span>{formatRupiah(totalPrice)}</span>
+                <div>
+                  <label className="block text-[0.74rem] font-bold text-[var(--ink)] mb-1">Catatan</label>
+                  <textarea
+                    rows={2}
+                    value={generalNotes}
+                    onChange={(e) => setGeneralNotes(e.target.value)}
+                    placeholder="Es kopi jangan terlalu manis"
+                    className={`${inputCls} resize-none`}
+                  />
                 </div>
-                <div className="flex items-center justify-between font-extrabold text-sm sm:text-base text-stone-900 pt-1 border-t border-stone-200/80">
-                  <span>Total Pembayaran</span>
-                  <span className="text-[#1B382B]">{formatRupiah(totalPrice)}</span>
-                </div>
-              </div>
 
-              <button
-                type="submit"
-                form="checkout-form"
-                className="w-full flex items-center justify-center gap-2 bg-[#1B382B] hover:bg-[#152C22] text-white font-bold py-3.5 rounded-xl shadow-lg transition-transform active:scale-98 text-sm"
-              >
-                <Send className="w-4 h-4 text-amber-400" />
-                <span>Kirim Pesanan ke WhatsApp</span>
-              </button>
-              <p className="text-[11px] text-center text-stone-400">
-                Format pesan terisi otomatis & terkirim ke kasir Warkop Indonesia
-              </p>
-            </div>
+                {errorMsg && (
+                  <div className="flex items-center gap-2 rounded-lg bg-red-50 px-3 py-2.5 text-[0.78rem] font-semibold text-red-700">
+                    <AlertCircle className="w-3.5 h-3.5 shrink-0" /> {errorMsg}
+                  </div>
+                )}
+              </form>
+            </>
           )}
         </div>
-      </div>
+
+        {items.length > 0 && (
+          <div className="px-5 py-4 border-t border-[var(--line)] bg-[var(--surface)] space-y-3">
+            <div className="flex items-center justify-between">
+              <span className="text-[0.82rem] text-[var(--muted)]">Total</span>
+              <span className="text-lg font-extrabold tabular-nums text-[var(--ink)]">{formatRupiah(totalPrice)}</span>
+            </div>
+            <button
+              type="submit"
+              form="checkout"
+              className="w-full inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--green)] hover:bg-[var(--green-dark)] py-3 text-sm font-bold text-white transition-colors"
+            >
+              <Send className="w-4 h-4" /> Kirim ke WhatsApp
+            </button>
+            <p className="text-[0.68rem] text-center text-[var(--muted)]">
+              Pesan terisi otomatis dan langsung terkirim ke kasir.
+            </p>
+          </div>
+        )}
+      </aside>
     </div>
   );
 }

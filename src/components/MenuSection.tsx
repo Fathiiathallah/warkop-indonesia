@@ -1,105 +1,71 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Coffee, Sparkles } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 
-const featuredItems = [
-  {
-    title: "Kopi Susu Khas",
-    subtitle: "Racikan kopi susu creamy & legit favorit pengunjung",
-    price: "Rp 15.000",
-    image: "/menu/kopi-susu.jpg",
-    badge: "Terlaris #1",
-  },
-  {
-    title: "Pisang Goreng Sambel",
-    subtitle: "Pisang goreng renyah dicocol sambal terasi khas Makassar",
-    price: "Rp 19.000",
-    image: "/menu/pisang-goreng.jpg",
-    badge: "Khas Makassar",
-  },
-  {
-    title: "Indomie Spesial Warkop",
-    subtitle: "Porsi mie gurih hangat dengan racikan bumbu khas",
-    price: "Rp 17.000",
-    image: "/menu/indomie-goreng.jpg",
-    badge: "Favorit Nongkrong",
-  },
+const featured = [
+  { name: "Kopi Susu", note: "Creamy, legit, racikan warkop", price: "15.000", img: "/menu/kopi-susu.jpg", tag: "Terlaris" },
+  { name: "Pisang Goreng Sambel", note: "Renyah, dicocol sambal terasi", price: "19.000", img: "/menu/pisang-goreng.jpg", tag: "Khas Makassar" },
+  { name: "Indomie Goreng", note: "Gurih, porsi pas buat begadang", price: "17.000", img: "/menu/indomie-goreng.jpg", tag: "Favorit" },
 ];
 
 export default function MenuSection() {
   return (
-    <section id="menu" className="py-20 md:py-28 bg-[#FAF7F2] text-stone-900 border-t border-stone-200/60">
-      <div className="max-w-6xl mx-auto px-4 sm:px-6">
-        {/* Header */}
-        <div className="text-center max-w-2xl mx-auto mb-12 sm:mb-16 space-y-3">
-          <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-emerald-100 text-[#1B382B] text-xs font-bold tracking-wide uppercase">
-            <Sparkles className="w-3.5 h-3.5 text-[#1B382B]" />
-            Katalog Menu Warkop
+    <section id="menu" className="py-16 sm:py-24 bg-[var(--surface)]">
+      <div className="max-w-6xl mx-auto px-5 sm:px-6">
+        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+          <div className="max-w-xl">
+            <span className="eyebrow text-[var(--green)]">Menu</span>
+            <h2 className="mt-3 text-[1.9rem] sm:text-[2.6rem] leading-[1.1] font-extrabold text-[var(--ink)]">
+              Yang paling sering dipesan.
+            </h2>
           </div>
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-[#1B382B] tracking-tight">
-            Pilihan Menu Favorit
-          </h2>
-          <p className="text-sm sm:text-base text-stone-600">
-            Mulai dari seduhan kopi otentik Makassar, aneka hidangan hangat, hingga pisang goreng sambel legendaris.
-          </p>
+          <Link
+            href="/menu"
+            className="inline-flex items-center gap-1.5 text-sm font-semibold text-[var(--green)] hover:text-[var(--green-dark)] transition-colors shrink-0"
+          >
+            Semua menu <ArrowRight className="w-4 h-4" />
+          </Link>
         </div>
 
-        {/* 3 Featured Image Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
-          {featuredItems.map((item, idx) => (
-            <Link
-              key={idx}
-              href="/menu"
-              className="group bg-white rounded-3xl overflow-hidden border border-stone-200/80 shadow-sm hover:shadow-xl transition-all duration-300 hover:-translate-y-1 flex flex-col"
-            >
-              {/* Image Container */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-stone-100">
+        <div className="mt-10 grid sm:grid-cols-3 gap-5">
+          {featured.map((item) => (
+            <Link key={item.name} href="/menu" className="card overflow-hidden group bg-white">
+              <div className="relative aspect-[4/3] overflow-hidden bg-[var(--surface)]">
                 <Image
-                  src={item.image}
-                  alt={item.title}
+                  src={item.img}
+                  alt={item.name}
                   fill
-                  className="object-cover transition-transform duration-500 group-hover:scale-105"
-                  sizes="(max-width: 768px) 100vw, 33vw"
+                  sizes="(max-width: 640px) 100vw, 33vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-[1.04]"
                 />
-                <div className="absolute top-3 left-3">
-                  <span className="text-[11px] font-extrabold px-3 py-1 rounded-full bg-white/90 backdrop-blur-md text-[#1B382B] shadow-sm">
-                    {item.badge}
-                  </span>
-                </div>
+                <span className="absolute top-3 left-3 rounded-full bg-white/95 px-2.5 py-1 text-[0.68rem] font-bold text-[var(--green)]">
+                  {item.tag}
+                </span>
               </div>
-
-              {/* Text Info */}
-              <div className="p-6 flex-1 flex flex-col justify-between space-y-3">
-                <div className="space-y-1">
-                  <h3 className="font-extrabold text-lg text-[#1B382B] group-hover:text-emerald-700 transition-colors">
-                    {item.title}
+              <div className="p-5">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="text-[0.95rem] font-bold text-[var(--ink)] group-hover:text-[var(--green)] transition-colors">
+                    {item.name}
                   </h3>
-                  <p className="text-xs sm:text-sm text-stone-500 leading-relaxed">
-                    {item.subtitle}
-                  </p>
-                </div>
-
-                <div className="pt-3 border-t border-stone-100 flex items-center justify-between">
-                  <span className="font-extrabold text-base text-[#1B382B]">
-                    {item.price}
-                  </span>
-                  <span className="text-xs font-bold text-emerald-700 group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
-                    Lihat menu <ArrowRight className="w-3.5 h-3.5" />
+                  <span className="text-[0.85rem] font-extrabold text-[var(--green)] tabular-nums whitespace-nowrap">
+                    Rp {item.price}
                   </span>
                 </div>
+                <p className="mt-1 text-[0.8rem] text-[var(--muted)]">{item.note}</p>
               </div>
             </Link>
           ))}
         </div>
 
-        {/* Centered View More Button */}
-        <div className="text-center mt-12 sm:mt-16">
+        <div className="mt-8 rounded-xl border border-[var(--line)] bg-white px-5 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+          <p className="text-[0.85rem] text-[var(--muted)]">
+            40+ item: kopi, teh, mie, camilan, sampai roasted bean Toraja. Pesan langsung, bayar di kasir.
+          </p>
           <Link
             href="/menu"
-            className="inline-flex items-center justify-center gap-2 px-9 py-4 rounded-full bg-[#1B382B] hover:bg-[#142A20] text-white font-bold text-sm sm:text-base transition-all duration-200 shadow-md hover:shadow-xl active:scale-95 group"
+            className="inline-flex items-center gap-2 rounded-lg bg-[var(--ink)] hover:bg-[var(--green)] px-5 py-2.5 text-sm font-semibold text-white transition-colors shrink-0"
           >
-            <span>Lihat Semua Menu & Pesan</span>
-            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+            Buka katalog <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </div>

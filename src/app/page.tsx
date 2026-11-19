@@ -4,6 +4,7 @@ import Hero from "@/components/Hero";
 import AboutSection from "@/components/AboutSection";
 import FacilitiesSection from "@/components/FacilitiesSection";
 import MenuSection from "@/components/MenuSection";
+import EventSection from "@/components/EventSection";
 import LocationSection from "@/components/LocationSection";
 import Footer from "@/components/Footer";
 import CartDrawer from "@/components/CartDrawer";
@@ -17,6 +18,7 @@ export default function Home() {
         <AboutSection />
         <FacilitiesSection />
         <MenuSection />
+        <EventSection />
         <LocationSection />
       </main>
       <Footer />
